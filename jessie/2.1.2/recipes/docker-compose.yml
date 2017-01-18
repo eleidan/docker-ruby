@@ -4,8 +4,8 @@ services:
     build: .
     image: rails_app
     volumes:
-      - .:/usr/src/app
-      - .docker/ruby/:/root/.rbenv/versions/2.1.2/
+      - .:/home/phantom/app
+      - .docker/ruby/:/home/phantom/.rbenv/versions/2.1.2/
       - .docker/.bash_history:/home/phantom/.bash_history
 
   dev:
