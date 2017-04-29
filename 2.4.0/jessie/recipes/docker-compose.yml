@@ -1,0 +1,38 @@
+version: '2'
+services:
+  core:
+    build: .
+    image: rails_app
+    volumes:
+      - .:/home/phantom/app
+      - .docker/ruby/:/home/phantom/.rbenv/versions/2.4.0/
+      - .docker/.bash_history:/home/phantom/.bash_history
+
+  dev:
+    extends:
+      service: core
+    links:
+      - db
+    environment:
+      - RAILS_ENV=development
+      - SERVICE_NAME=rails_app.dev
+    command: [bash]
+
+  test:
+    extends:
+      service: core
+    links:
+      - db
+    environment:
+      - RAILS_ENV=test
+      - SERVICE_NAME=rails_app.test
+    command: [bash]
+
+  db:
+    image: postgres:9.4.10
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASS
+    volumes:
+      - .:/usr/src/app
+      - .docker/db/:/var/lib/postgresql/data/
