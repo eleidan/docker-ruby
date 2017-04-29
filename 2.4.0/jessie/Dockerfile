@@ -1,5 +1,4 @@
 FROM eleidan/buildpack-deps:jessie
-MAINTAINER Oleg Kulyk
 
 LABEL maintainer="Oleg Kulyk" \
       description="Ruby 2.4.0 based on Debian Jessie" \
