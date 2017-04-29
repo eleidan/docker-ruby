@@ -12,6 +12,7 @@ sed -i -r \
     -e "s/Ruby ${SEMVER_PATTERN}/Ruby ${VER}/g" \
     -e "s/ruby:${SEMVER_PATTERN}/ruby:${VER}/g" \
     -e "s/RBENV_VERSION=${SEMVER_PATTERN}/RBENV_VERSION=${VER}/g" \
+    -e "s/version=\S*/version=\"$(date +"%F")\"/g" \
     ${TARGET_FILE}
 
 TARGET_FILE="${VER}/jessie/recipes/docker-compose.yml"
