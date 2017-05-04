@@ -39,6 +39,5 @@ RUN chmod +x /usr/local/bin/docker-init.sh
 
 ### Needed for the docker-init.sh script
 COPY recipes $HOME/recipes
-COPY scripts $HOME/scripts
 
 CMD ["/bin/bash"]
