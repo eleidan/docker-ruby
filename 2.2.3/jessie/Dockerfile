@@ -3,12 +3,11 @@ FROM eleidan/buildpack-deps:jessie
 LABEL maintainer="Oleg Kulyk" \
       description="Ruby 2.2.3 based on Debian Jessie" \
       init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.2.3-jessie docker-init.sh" \
-      run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.2.3-jessie bash" \
-      version="2017-04-29"
+      run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.2.3-jessie" \
+      version="2017-05-08"
 
-ENV RBENV_VERSION=2.2.3
-ENV SERVICE_NAME="ruby:$RBENV_VERSION-jessie" \
-    HOME=/home/phantom
+ENV RBENV_VERSION=2.2.3 \
+    SERVICE_NAME="ruby:2.2.3-jessie"
 
 ### Switch to non-root user
 USER phantom
@@ -28,8 +27,6 @@ RUN git clone https://github.com/rbenv/rbenv.git $RBENV_PATH \
     # Install bundler
     && /bin/bash -l -c 'gem install bundler'
 
-WORKDIR $HOME/app
-
 ### Switch back to root user
 # Needed for entrypoint script running
 USER root
@@ -40,4 +37,4 @@ RUN chmod +x /usr/local/bin/docker-init.sh
 ### Needed for the docker-init.sh script
 COPY recipes $HOME/recipes
 
-CMD ["/bin/bash"]
+WORKDIR $HOME/app
