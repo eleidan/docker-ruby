@@ -7,7 +7,7 @@ LABEL maintainer="Oleg Kulyk" \
       version="2017-05-08"
 
 ENV RBENV_VERSION=2.4.0 \
-ENV SERVICE_NAME="ruby:2.4.0-jessie"
+    SERVICE_NAME="ruby:2.4.0-jessie"
 
 ### Switch to non-root user
 USER phantom
