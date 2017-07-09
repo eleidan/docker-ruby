@@ -20,7 +20,7 @@ RUN git clone https://github.com/rbenv/rbenv.git $RBENV_PATH \
     && src/configure && make -C src \
     && echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> $HOME/.bashrc \
     && echo 'eval "$(rbenv init -)"' >> $HOME/.bashrc \
-    && bin/rbenv install $RBENV_VERSION \
+    && RUBY_CONFIGURE_OPTS=--with-openssl-dir=/opt/local bin/rbenv install $RBENV_VERSION \
     # Set defaults for gem install
     && echo 'install: --no-document' >> $HOME/.gemrc \
     && echo 'update: --no-document' >> $HOME/.gemrc \
