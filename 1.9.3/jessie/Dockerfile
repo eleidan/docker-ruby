@@ -3,7 +3,7 @@ FROM eleidan/buildpack-deps:jessie
 LABEL maintainer="Oleg Kulyk" \
       description="Ruby 1.9.3-p551 based on Debian Jessie" \
       init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:1.9.3-jessie docker-init.sh" \
-      run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:1.9.3-jessie"
+      run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:1.9.3-jessie" \
       version="2017-05-08"
 
 ENV RBENV_VERSION="1.9.3-p551" \
