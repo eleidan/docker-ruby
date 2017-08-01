@@ -4,7 +4,7 @@ LABEL maintainer="Oleg Kulyk" \
       description="Ruby 2.1.2 based on Debian Jessie" \
       init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.1.2-jessie docker-init.sh" \
       run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.1.2-jessie" \
-      version="2017-05-08"
+      version="2017-08-01"
 
 ENV RBENV_VERSION=2.1.2 \
     SERVICE_NAME="ruby:2.1.2-jessie"

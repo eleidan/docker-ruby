@@ -1,10 +1,10 @@
 FROM eleidan/buildpack-deps:trusty
 
 LABEL maintainer="Oleg Kulyk" \
-      description="Ruby 2.1.2 based on Ubuntu 14.04" \
+      description="Ruby 2.1.2 based on Ubuntu 16.04" \
       init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.1.2-trusty docker-init.sh" \
       run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.1.2-trusty" \
-      version="2017-05-08"
+      version="2017-08-01"
 
 ENV RBENV_VERSION=2.1.2 \
     SERVICE_NAME="ruby:2.1.2-trusty"
