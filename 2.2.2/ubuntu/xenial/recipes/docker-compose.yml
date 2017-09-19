@@ -4,7 +4,6 @@ services:
     build: .
     volumes:
       - .:/home/phantom/app
-      - .docker/ruby/:/home/phantom/.rbenv/versions/2.2.2/
       - .docker/.bash_history:/home/phantom/.bash_history
     links:
       - db
