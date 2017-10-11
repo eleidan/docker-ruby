@@ -1,13 +1,13 @@
-FROM eleidan/buildpack-deps:xenial
+FROM eleidan/buildpack-deps:ubuntu-16.04
 
 LABEL maintainer="Oleg Kulyk" \
       description="Ruby 2.4.1 based on Ubuntu 16.04" \
-      init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.4.1-xenial docker-init.sh" \
-      run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.4.1-xenial" \
-      version="2017-08-01"
+      init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.4.1-ubuntu-16.04 docker-init.sh" \
+      run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/ruby:2.4.1-ubuntu-16.04" \
+      version="2017-10-11"
 
 ENV RBENV_VERSION=2.4.1 \
-    SERVICE_NAME="ruby:2.4.1-xenial"
+    SERVICE_NAME="ruby:2.4.1-ubuntu-16.04"
 
 ### Switch to non-root user
 USER phantom

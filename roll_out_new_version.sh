@@ -8,7 +8,7 @@ DISTRO_RELEASE=$3
 BASE_DISTRO_RELEASE="jessie"
 case $DISTRO_FAMILY in
   ubuntu )
-    BASE_DISTRO_RELEASE="xenial"
+    BASE_DISTRO_RELEASE="16.04"
     ;;
   centos )
     BASE_DISTRO_RELEASE="6.6"
