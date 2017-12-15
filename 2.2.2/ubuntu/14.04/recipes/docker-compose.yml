@@ -1,0 +1,10 @@
+version: '2'
+services:
+  dev:
+    build: .
+    volumes:
+      - .:/home/phantom/app
+      - .docker/.bash_history:/home/phantom/.bash_history
+    environment:
+      - SERVICE_NAME=rails_app.dev
+
