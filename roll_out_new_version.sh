@@ -1,52 +1,120 @@
 #!/usr/bin/env bash
+################################################################################
+PROGRAM=$(basename $0)
+read -r -d '' USAGE << EOM
+Create release sources based on existing one.
 
-# Copy existing one as a base for another version
-RUBY_VERSION=$1
-DISTRO_FAMILY=$2
-DISTRO_RELEASE=$3
+Usage:
+  $PROGRAM -r VERSION
+  $PROGRAM [--help]
 
-BASE_DISTRO_RELEASE="jessie"
-case $DISTRO_FAMILY in
-  ubuntu )
-    BASE_DISTRO_RELEASE="16.04"
-    ;;
-  centos )
-    BASE_DISTRO_RELEASE="6.6"
-    ;;
-esac
-NEW_RUBY_PATH="${RUBY_VERSION}/${DISTRO_FAMILY}/${DISTRO_RELEASE}"
-BASE_RUBY_PATH="2.2.2/${DISTRO_FAMILY}/${BASE_DISTRO_RELEASE}"
-mkdir -p ${NEW_RUBY_PATH}
-cp -r ${BASE_RUBY_PATH}/* ${NEW_RUBY_PATH}/
+Options:
+  -r VERSION            Specify rust version to create.
+  -h, --help            Print help message.
+EOM
 
-TARGET_FILE="${NEW_RUBY_PATH}/Dockerfile"
-sed -i -r \
-    -e "s/$BASE_DISTRO_RELEASE/${DISTRO_RELEASE}/g" \
-    -e "s/version=\S*/version=\"$(date +"%F")\"/g" \
-    ${TARGET_FILE}
+
+################################################################################
+function show_usage_and_exit_with_code {
+  echo "$USAGE"
+  exit $1
+}
+
+
+function process_params {
+  if [[ "$1" = "--" ]]; then
+    show_usage_and_exit_with_code 1
+  fi
+
+  while true; do
+    case "$1" in
+        -r)
+            RELEASE_VERSION="$2"
+            shift 2
+            ;;
+        -h|--help)
+            show_usage_and_exit_with_code 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Programming error"
+            exit 3
+            ;;
+    esac
+  done
+}
+
+
+function validate_rust_release_is_specified {
+  if [[ "${RELEASE_VERSION}x" = "x" ]]; then
+    echo "Error: release is not specified"
+    exit 1
+  fi
+}
+
+function validate_input {
+  validate_rust_release_is_specified
+}
+################################################################################
+getopt --test > /dev/null
+if [[ $? -ne 4 ]]; then
+    echo "I’m sorry, `getopt --test` failed in this environment."
+    exit 1
+fi
+
+SHORT="r:h"
+LONG="help"
+PARSED=$(getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@")
+
+
+if [[ $? -ne 0 ]]; then
+    # e.g. $? == 1
+    #  then getopt has complained about wrong arguments to stdout
+    exit 2
+fi
+
+# Flat out parsed params into list of arguments
+eval set -- "$PARSED"
+################################################################################
+function fetch_ruby_major {
+  local major=$(echo $1 | cut -f1 -d'.')
+  local minor=$(echo $1 | cut -f2 -d'.')
+  echo "${major}.${minor}"
+}
+
+process_params $@
+validate_input
+mkdir -p ${RELEASE_VERSION}
+
+SOURCE_VERSION="2.2.2"
+SOURCE_VERSION_MAJOR=$(fetch_ruby_major ${SOURCE_VERSION})
+RELEASE_VERSION_MAJOR=$(fetch_ruby_major ${RELEASE_VERSION})
 
 SEMVER_PATTERN="[0-9]+\.[0-9]+\.[0-9]+"
+ROOT_DIR=$(pwd)
+cp -R ${SOURCE_VERSION}/* ${RELEASE_VERSION}/
 
-TARGET_FILE="${NEW_RUBY_PATH}/docker-init.sh"
-sed -i -r \
-    -e "s|versions/${SEMVER_PATTERN}|versions/${RUBY_VERSION}|g" \
-    ${TARGET_FILE}
+pushd ${SOURCE_VERSION} > /dev/null
+for distro_family in $(ls); do
+  pushd $distro_family > /dev/null
+  for distro_release in $(ls); do
+    TARGET_FILE="${ROOT_DIR}/${RELEASE_VERSION}/${distro_family}/${distro_release}/Dockerfile"
+    sed -i -r \
+        -e "s/Ruby ${SOURCE_VERSION}/Ruby ${RELEASE_VERSION}/g" \
+        -e "s/ruby:${SOURCE_VERSION}/ruby:${RELEASE_VERSION}/g" \
+        -e "s/RUBY_VERSION=\"${SOURCE_VERSION}\"/RUBY_VERSION=\"${RELEASE_VERSION}\"/g" \
+        -e "s/RUBY_MAJOR=\"${SOURCE_VERSION_MAJOR}\"/RUBY_MAJOR=\"${RELEASE_VERSION_MAJOR}\"/g" \
+        -e "s/version=\S*/version=\"$(date +"%F")\"/g" \
+        ${TARGET_FILE}
 
-TARGET_FILE="${NEW_RUBY_PATH}/Dockerfile"
-sed -i -r \
-    -e "s/Ruby ${SEMVER_PATTERN}/Ruby ${RUBY_VERSION}/g" \
-    -e "s/ruby:${SEMVER_PATTERN}/ruby:${RUBY_VERSION}/g" \
-    -e "s/RBENV_VERSION=${SEMVER_PATTERN}/RBENV_VERSION=${RUBY_VERSION}/g" \
-    -e "s/version=\S*/version=\"$(date +"%F")\"/g" \
-    ${TARGET_FILE}
-
-TARGET_FILE="${NEW_RUBY_PATH}/recipes/docker-compose.yml"
-sed -i -r \
-    -e "s|versions/${SEMVER_PATTERN}|versions/${RUBY_VERSION}|g" \
-    ${TARGET_FILE}
-
-TARGET_FILE="${NEW_RUBY_PATH}/recipes/Dockerfile"
-sed -i -r \
-    -e "s/ruby:${SEMVER_PATTERN}/ruby:${RUBY_VERSION}/g" \
-    -e "s/$BASE_DISTRO_RELEASE/${DISTRO_RELEASE}/g" \
-    ${TARGET_FILE}
+    TARGET_FILE="${ROOT_DIR}/${RELEASE_VERSION}/${distro_family}/${distro_release}/recipes/Dockerfile"
+    sed -i -r \
+        -e "s/ruby:${SOURCE_VERSION}/ruby:${RELEASE_VERSION}/g" \
+        ${TARGET_FILE}
+  done
+  popd > /dev/null
+done
+popd > /dev/null
