@@ -4,15 +4,14 @@ LABEL maintainer="Oleg Kulyk" \
       description="Ruby 2.2.2 based on Ubuntu 16.04" \
       init="docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/home/phantom/app eleidan/ruby:2.2.2-ubuntu-16.04 docker-init.sh" \
       run="docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/home/phantom/app eleidan/ruby:2.2.2-ubuntu-16.04" \
-      version="2019-02-13"
+      version="2019-02-14"
 
-ENV RBENV_VERSION=2.2.2 \
-    SERVICE_NAME="ruby:2.2.2-ubuntu-16.04"
+ENV SERVICE_NAME="ruby:2.2.2-ubuntu-16.04"
 
 #################################################################################
 ## Ruby
-ENV RUBY_MAJOR=2.2 \
-    RUBY_VERSION=2.2.10
+ENV RUBY_MAJOR="2.2" \
+    RUBY_VERSION="2.2.2"
 ENV GEM_HOME=/home/phantom/.bundle
 ENV BUNDLE_APP_CONFIG=${GEM_HOME}
 
