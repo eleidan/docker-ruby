@@ -10,11 +10,13 @@ ENV SERVICE_NAME="ruby:2.6.1-ubuntu-16.04"
 
 #################################################################################
 ## Ruby
-ENV RUBY_MAJOR="2.6" \
-    RUBY_VERSION="2.6.1"
-ENV GEM_HOME=/home/phantom/.bundle
-ENV BUNDLE_APP_CONFIG=${GEM_HOME}
+ENV RUBY_MAJOR="2.6"
+ENV RUBY_VERSION="2.6.1"
+ENV GEM_HOME="/home/phantom/.bundle"
+ENV BUNDLE_APP_CONFIG="${GEM_HOME}"
+ENV PATH="$PATH:${GEM_HOME}/bin"
 
+USER root
 #from https://github.com/docker-library/ruby/blob/d4d6ba59b2b0ff95c178a46bfc362675eb507177/2.1/Dockerfile
 RUN mkdir -p /usr/src/ruby \
     && curl -SL "http://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR}/ruby-${RUBY_VERSION}.tar.bz2" \
@@ -30,7 +32,6 @@ RUN mkdir -p /usr/src/ruby \
 
 ### Needed for the docker-init.sh script
 COPY --chown=phantom:phantom recipes $HOME/recipes
-
 RUN chown -R phantom:phantom ${HOME}
 
 WORKDIR $HOME/app
