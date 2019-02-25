@@ -23,12 +23,12 @@ RUN mkdir -p /usr/src/ruby \
     | tar -xjC /usr/src/ruby --strip-components=1 \
     && cd /usr/src/ruby \
     && autoconf \
-    && ./configure --disable-install-doc \
+    && ./configure --disable-install-doc --disable-install-rdoc \
     && make -j"$(nproc)" \
     && make install \
     && cd / \
     && rm -r /usr/src/ruby \
-    && echo 'gem: --no-rdoc --no-ri' >> "$HOME/.gemrc"
+    && echo 'gem: --no-document' >> "$HOME/.gemrc"
 
 ### Needed for the docker-init.sh script
 COPY --chown=phantom:phantom recipes $HOME/recipes
