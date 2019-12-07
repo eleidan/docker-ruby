@@ -2,6 +2,7 @@ version: '2.2'
 
 volumes:
   bash-history:
+  bundle-cache:
   # pg-data:
 
 services:
@@ -10,6 +11,7 @@ services:
     volumes:
       - .:/home/phantom/app
       - bash-history:/home/phantom/bash-history
+      - bundle-cache:/home/phantom/.bundle
     #links:
     #  - db
     #environment:

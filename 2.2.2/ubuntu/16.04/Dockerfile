@@ -17,6 +17,14 @@ ENV BUNDLE_APP_CONFIG="${GEM_HOME}"
 ENV PATH="$PATH:${GEM_HOME}/bin"
 
 USER root
+# skip installing gem documentation
+RUN set -eux; \
+	mkdir -p /usr/local/etc; \
+	{ \
+		echo 'install: --no-document'; \
+		echo 'update: --no-document'; \
+	} >> /usr/local/etc/gemrc
+
 #from https://github.com/docker-library/ruby/blob/d4d6ba59b2b0ff95c178a46bfc362675eb507177/2.1/Dockerfile
 RUN mkdir -p /usr/src/ruby \
     && curl -SL "http://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR}/ruby-${RUBY_VERSION}.tar.bz2" \
