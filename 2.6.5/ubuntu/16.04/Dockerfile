@@ -4,7 +4,7 @@ LABEL maintainer="Oleg Kulyk" \
       description="Ruby 2.6.5 based on Ubuntu 16.04" \
       init="docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/home/phantom/app eleidan/ruby:2.6.5-ubuntu-16.04 docker-init.sh" \
       run="docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/home/phantom/app eleidan/ruby:2.6.5-ubuntu-16.04" \
-      version="2019-12-07"
+      version="2019-12-08"
 
 ENV SERVICE_NAME="ruby:2.6.5-ubuntu-16.04"
 
