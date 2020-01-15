@@ -1,0 +1,28 @@
+version: '2.2'
+
+volumes:
+  bash-history:
+  bundle-cache:
+  # pg-data:
+
+services:
+  dev:
+    build: .
+    user: phantom
+    volumes:
+      - .:/home/phantom/app
+      - bash-history:/home/phantom/bash-history
+      - bundle-cache:/home/phantom/.bundle
+    #links:
+    #  - db
+    #environment:
+    #  - SERVICE_NAME=rails_app.dev
+
+  #db:
+  #  image: postgres:9.6
+  #  environment:
+  #    - POSTGRES_USER=$DB_USER
+  #    - POSTGRES_PASSWORD=$DB_PASS
+  #  volumes:
+  #    - .:/home/phantom/app
+  #    - pg-data:/var/lib/postgresql/data/
