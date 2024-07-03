@@ -1,0 +1,5 @@
+services:
+  ruby:
+    image: eleidan/ruby:3.3.3-ubuntu-24.04
+    build:
+      context: ./3.3.3/ubuntu/24.04/

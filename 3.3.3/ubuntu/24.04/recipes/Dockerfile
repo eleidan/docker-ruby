@@ -1,4 +1,4 @@
-FROM eleidan/ruby:2.4.1-ubuntu-16.04
+FROM eleidan/ruby:3.3.3-ubuntu-24.04
 
 RUN mkdir ${HOME}/.bundle
 

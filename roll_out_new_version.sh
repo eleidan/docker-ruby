@@ -9,7 +9,7 @@ Usage:
   $PROGRAM [--help]
 
 Options:
-  -r VERSION            Specify rust version to create.
+  -r VERSION            Specify Ruby version to create.
   -h, --help            Print help message.
 EOM
 
@@ -89,7 +89,7 @@ process_params $@
 validate_input
 mkdir -p ${RELEASE_VERSION}
 
-SOURCE_VERSION="2.2.2"
+SOURCE_VERSION="2.6.5"
 SOURCE_VERSION_MAJOR=$(fetch_ruby_major ${SOURCE_VERSION})
 RELEASE_VERSION_MAJOR=$(fetch_ruby_major ${RELEASE_VERSION})
 
